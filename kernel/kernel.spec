@@ -1,11 +1,11 @@
-%global _commit 3d5057934a90d5c323504eccba45439e7bea9fd9
+%global _commit 2ec4dde2050509aa8b972dfaf93b8d3628bcef65
 %global _user ergolyam
 %global _repo pipa-mainline-linux
 
 Name: kernel
 ExclusiveArch: aarch64
 Version: 6.15.8
-Release: 16~pipa.1
+Release: 16~pipa.2
 Summary: AIO package for linux kernel, modules and headers for Xiaomi Pad 6 (pipa).
 URL: https://github.com/%{_user}/%{_repo}
 Source1: %{url}/archive/%{_commit}/%{_repo}-%{_commit}.tar.gz
