@@ -29,7 +29,6 @@ jobs:
           BASE="${{ github.event.before }}"
           HEAD="${{ github.sha }}"
 
-          # На случай создания ветки / первого коммита
           if [ -z "${BASE}" ] || [ "${BASE}" = "0000000000000000000000000000000000000000" ]; then
             if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
               BASE="$(git rev-parse HEAD^)"
@@ -38,12 +37,10 @@ jobs:
             fi
           fi
 
-          # Список изменённых файлов и преобразование в уникальные верхнеуровневые папки
           git diff --name-only "${BASE}" "${HEAD}" \
             | awk -F/ 'NF>1 {print $1}' \
             | sort -u > _cands.txt || true
 
-          # Фильтрация: только существующие директории и не .github/.copr
           : > _dirs.txt
           while read -r d; do
             [ -z "${d}" ] && continue
@@ -60,12 +57,10 @@ jobs:
 
           echo "has_changes=true" >> "$GITHUB_OUTPUT"
 
-          # Формируем JSON-матрицу вида {"include":[{"subdir":"dir1"},{"subdir":"dir2"}]}
           MATRIX='{"include":['
           i=0
           while read -r d; do
             [ $i -gt 0 ] && MATRIX+=","
-            # простое экранирование (имена верхнеуровневых папок обычно без кавычек)
             MATRIX+="{\"subdir\":\"${d}\"}"
             i=$((i+1))
           done < _dirs.txt
